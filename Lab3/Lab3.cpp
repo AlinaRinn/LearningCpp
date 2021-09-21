@@ -12,7 +12,7 @@ struct Employee
 void print(Employee* Employees, int N) {
     cout << endl << endl;
     for (int j = 0; j < N; j++) {
-        cout << Employees[N].FIO << endl;
+        cout << Employees[j].FIO << endl;
     }
     cout << endl << endl;
 }
@@ -29,7 +29,6 @@ int main()
     Employees[4].FIO = "Vasiliy Nikolaev"; Employees[4].gender = "male"; Employees[4].yearBorn = "1977";
     Employees[5].FIO = "Mariya Kavo"; Employees[5].gender = "female"; Employees[5].yearBorn = "2010";
     Employees[6].FIO = "Zhmih Molodoy"; Employees[6].gender = "male"; Employees[6].yearBorn = "1988";
-
     print(Employees, AMOUNTOFEMPLOYEE);
     cout << "Hello World!\n";
     delete[] Employees;
