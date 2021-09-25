@@ -41,6 +41,23 @@ int main()
         C[i] = new double[N];
     }
 
+    double*** AA = new double** [N];
+    for (int i = 0; i < N; i++) {
+        AA[i] = new double* [N];
+        for (int j = 0; j < N; j++) {
+            AA[i][j] = new double[N];
+        }
+    }
+   
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                AA[i][j][k] = 1;         
+            }
+        }
+    }
+
     //random
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -64,6 +81,13 @@ int main()
         delete[] A[i];
         delete[] B[i];
         delete[] C[i];
+    }
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            delete[] AA[i][j];
+        }
+        delete[] AA[i];
     }
     system("pause");
 }
