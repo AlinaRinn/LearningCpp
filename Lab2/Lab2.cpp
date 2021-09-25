@@ -29,7 +29,7 @@ int main()
     int N = 1;
     cout << "Enter array size:\n"; 
     cin >> N;
-    srand(time(0));
+    srand((unsigned int)time(0));
 
     //array init
     double** A = new double* [N]; 
@@ -41,6 +41,7 @@ int main()
         C[i] = new double[N];
     }
 
+    //3D array + filling
     double*** AA = new double** [N];
     for (int i = 0; i < N; i++) {
         AA[i] = new double* [N];
@@ -49,7 +50,6 @@ int main()
         }
     }
    
-
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < N; k++) {
