@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 struct Employee
@@ -43,21 +44,36 @@ double average(int* E, int N) {
 
 int main()
 {
-    int amountOfEmployees = 7;
+    int amountOfEmployees = 8;
     Employee * Employees = new Employee[amountOfEmployees];
     int * defaultArray = new int[10];
+    string Names[20] = {"Olivia", "Emma", "Ava", "Charlotte", "Sophia", "Amelia", "Isabella", "Mia", "Evelyn", "Harper", "Camila", "Gianna", "Abigail", "Luna", "Ella", "Elizabeth", "Sofia", "Emily", "Avery", "Mila"};
+    srand((unsigned int)time(0));
+    //filling
     for (int j = 0; j < 10; j++) {
-        defaultArray[j] = j+1;
+        defaultArray[j] = j + 1;
+    }
+    for (int j = 0; j < amountOfEmployees; j++) {
+        int rndgender = rand() % 2;
+        int rndname = rand() % 20;
+        Employees[j].yearBorn = 1910 + rand() % 99;
+        Employees[j].FIO = Names[rndname];
+        if (rndgender == 0) {
+            Employees[j].gender = "male";
+        }
+        else {
+            Employees[j].gender = "female";
+        }
     }
 
-    //filling
-    Employees[0].FIO = "Loh pashiloy"; Employees[0].gender = "male"; Employees[0].yearBorn = 1999;
-    Employees[1].FIO = "Alina Pimenova"; Employees[1].gender = "female"; Employees[1].yearBorn = 2004;
-    Employees[2].FIO = "Alisa Eotova"; Employees[2].gender = "female"; Employees[2].yearBorn = 1984;
-    Employees[3].FIO = "Ivan Govnov"; Employees[3].gender = "male"; Employees[3].yearBorn = 1928;
-    Employees[4].FIO = "Vasiliy Nikolaev"; Employees[4].gender = "male"; Employees[4].yearBorn = 1977;
-    Employees[5].FIO = "Mariya Kavo"; Employees[5].gender = "female"; Employees[5].yearBorn = 2010;
-    Employees[6].FIO = "Zhmih Molodoy"; Employees[6].gender = "male"; Employees[6].yearBorn = 1988;
+
+    //Employees[0].FIO = "Loh pashiloy"; Employees[0].gender = "male"; Employees[0].yearBorn = 1999;
+    //Employees[1].FIO = "Alina Pimenova"; Employees[1].gender = "female"; Employees[1].yearBorn = 2004;
+    //Employees[2].FIO = "Alisa Eotova"; Employees[2].gender = "female"; Employees[2].yearBorn = 1984;
+    //Employees[3].FIO = "Ivan Govnov"; Employees[3].gender = "male"; Employees[3].yearBorn = 1928;
+    //Employees[4].FIO = "Vasiliy Nikolaev"; Employees[4].gender = "male"; Employees[4].yearBorn = 1977;
+    //Employees[5].FIO = "Mariya Kavo"; Employees[5].gender = "female"; Employees[5].yearBorn = 2010;
+    //Employees[6].FIO = "Zhmih Molodoy"; Employees[6].gender = "male"; Employees[6].yearBorn = 1988;
 
     //print
     cout << "Employees list: " << endl << endl;
