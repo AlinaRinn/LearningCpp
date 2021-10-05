@@ -57,10 +57,10 @@ public:
 
 int main()
 {
-    const int anim = 10;
-    Cat cat[anim];
-    Dog dog[anim];
-    for (int i = 0; i < anim; i++) {
+    const int anima = 10;
+    Cat cat[anima];
+    Dog dog[anima];
+    for (int i = 0; i < anima; i++) {
         cat[i].Play();
         dog[i].Play();
         cat[i].Sleep();
