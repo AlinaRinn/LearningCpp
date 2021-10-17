@@ -37,8 +37,8 @@ public:
 		cin >> N;
 		Sw = rand() % N;
 		Pw = N - Sw;
-		Sword * sword = new Sword[Sw];
-		Pistol * pistol = new Pistol[Pw];
+		Sword* sword = new Sword[Sw];
+		Pistol* pistol = new Pistol[Pw];
 
 		for (int i = 0; i < Sw; i++) {
 			sword[i].damage = 80 + rand() % 20;
@@ -52,30 +52,28 @@ public:
 		char exit = ' ';
 		cout << "Enter 'y' if you want to select this weapon; or 'n' if don't.\n" << endl;
 
-		for (int i = 0; i < Sw; i++) {
-			cout << "Sword "<< i <<": " << endl << "Damage: " << sword[i].damage << endl << "Reload: " << sword[i].reload << endl << "DPM: " << sword[i].DPM() << endl;
-			cin >> exit;
-			if (exit == 'y') {
-				cout << "\nWeapon selected. Good luck!";
-				break;
-				system("pause");
-			}
-			if (exit == 'n') {
-				continue;
-			}			
-		}
-		for (int i = 0; i < Pw; i++) {
-			cout << "Pistol " << i << ": " << endl << "Damage: " << pistol[i].damage << endl << "Attack Speed: " << pistol[i].reload << endl << "DPM: " << pistol[i].DPM() << endl;
-			cin >> exit;
-			if (exit == 'y') {
-				cout << "\nWeapon selected. Good luck!";
-				break;
-				system("pause");
-			}
-			if (exit == 'n') {
-				continue;
+		if (exit != 'y') {
+			for (int i = 0; i < Sw; i++) {
+				cout << "Sword " << i << ": " << endl << "Damage: " << sword[i].damage << endl << "Reload: " << sword[i].reload << endl << "DPM: " << sword[i].DPM() << endl;
+				cin >> exit;
+				if (exit == 'y') {
+					cout << "\nWeapon selected. Good luck!\n\n";
+					break;
+				}
 			}
 		}
+
+		if (exit != 'y') {
+			for (int i = 0; i < Pw; i++) {
+				cout << "Pistol " << i << ": " << endl << "Damage: " << pistol[i].damage << endl << "Attack Speed: " << pistol[i].reload << endl << "DPM: " << pistol[i].DPM() << endl;
+				cin >> exit;
+				if (exit == 'y') {
+					cout << "\nWeapon selected. Good luck!\n\n";
+					break;
+				}
+			}
+		}
+		system("pause");
 	}
 };
 

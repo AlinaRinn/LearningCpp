@@ -64,6 +64,7 @@ int main()
         cat[i].Play();
         dog[i].Play();
         cat[i].Sleep();
-        dog[i].Play();
+        dog[i].Sleep();
+        cout << endl;
     }
 }
