@@ -1,42 +1,48 @@
 ﻿#include <iostream>
 #include <windows.h>
 #include <ctime>
+#include <vector>
+#include <iomanip>
 
 using namespace std;
 
 class AutoWeapon {
+public:
 	unsigned int ammo = 30,
 		damage = 1;
 
-public:
 	int single_shoot() {
 		if (ammo > 0) {
 			ammo--;
-			cout << "Bang!" << endl;
+			cout << "Bang!";
 			Sleep(1000);
-			return damage;
 		}
 		else if (ammo <= 0) {
-			return 0;
 			reload();
+			ammo--;
+			cout << "Bang!";
+			Sleep(1000);
 		}
+		return damage;
 	}
 
 	int multi_shoot() {
 		if (ammo >= 5) {
 			ammo -= 5;
-			cout << "Bang! Bang! Bang! Bang! Bang!" << endl;
+			cout << "Bang! Bang! Bang! Bang! Bang!";
 			Sleep(1000);
-			return damage * 5;
 		}
 		else if (ammo < 5) {
-			return 0;
 			reload();
+			ammo -= 5;
+			cout << "Bang! Bang! Bang! Bang! Bang!";
+			Sleep(1000);
 		}
+		return damage * 5;
 	}
 
 	void reload() {
-		cout << "Reloading..." << endl;
+		cout << "\nReloading..." << endl;
 		ammo = 30;
 		Sleep(5000);
 	}
@@ -49,11 +55,11 @@ public:
 	double pntrtionchance = (radius + range) / 2; // 0-100
 	bool movable = false; // 50or100
 	char material = 'W'; // M - 95, W - 100, L - 99
-	unsigned int hp = 5;
+	int hp = 5;
 
 	virtual double chance() = 0;
 
-	virtual int penetration() = 0;
+	virtual void penetration(int p) = 0;
 
 	virtual bool availability() = 0;
 };
@@ -70,12 +76,12 @@ double Target::chance() {             // Default
 	else if (material == 'L') {
 		chnce += 99;
 	}
-	chnce += radius + range + pntrtionchance;
+	chnce += (double)radius + (double)range + pntrtionchance;
 	return chnce / 500;
 }
 
-int Target::penetration() {           // Default
-	return hp -= 1;
+void Target::penetration(int p) {           // Default
+	hp -= p;
 }
 
 bool Target::availability() {          // Default
@@ -85,14 +91,14 @@ bool Target::availability() {          // Default
 class BigTarget : public Target {
 public:
 	const int radius = 100; // 0-100
-	unsigned int hp = 5;
+	int hp = 5;
 
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual int penetration() {
-		return Target::penetration();
+	virtual void penetration(int p) {
+		return Target::penetration(p);
 	}
 
 	virtual bool availability() {
@@ -103,14 +109,14 @@ public:
 class MediumTarget : public Target {
 public:
 	int radius = 75;
-	unsigned int hp = 3;
+	int hp = 3;
 
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual int penetration() {
-		return Target::penetration();
+	virtual void penetration(int p) {
+		return Target::penetration(p);
 	}
 
 	virtual bool availability() {
@@ -121,14 +127,14 @@ public:
 class SmallTarget : public Target {
 public:
 	int radius = 50;
-	unsigned int hp = 1;
+	int hp = 1;
 
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual int penetration() {
-		return Target::penetration();
+	virtual void penetration(int p) {
+		return Target::penetration(p);
 	}
 
 	virtual bool availability() {
@@ -140,7 +146,7 @@ class RectangleTarget : public Target {
 public:
 	int radius = 44,
 		shape = 88;
-	unsigned int hp = 1;
+	int hp = 1;
 
 
 	double chance() {
@@ -155,12 +161,12 @@ public:
 		else if (material == 'L') {
 			chnce += 99;
 		}
-		chnce += radius + range + pntrtionchance + shape;
+		chnce += (double)radius + (double)range + pntrtionchance + shape;
 		return chnce / 600;
 	}
 
-	virtual int penetration() {
-		return Target::penetration();
+	virtual void penetration(int p) {
+		return Target::penetration(p);
 	}
 
 	virtual bool availability() {
@@ -170,51 +176,97 @@ public:
 
 class ShootingField {
 public:
-	unsigned int time = 60;
+	int time = 60, targets = 60;
 
 	void start() {
-		int cntr_trgt_1 = 0, cntr_trgt_2 = 0, cntr_trgt_3 = 0, cntr_trgt_4 = 0, selector = 0;
-		cntr_trgt_1 = rand() % 20;
-		cntr_trgt_2 = rand() % 20;
-		cntr_trgt_3 = rand() % 20;
-		cntr_trgt_4 = rand() % 20;
-		selector = rand() % 2;
-		BigTarget* target = new BigTarget[cntr_trgt_1];
-		AutoWeapon weapon;
-		cout << "Total targets now: " << cntr_trgt_1 << endl;
-
-		while (time > 0) {
-			double shoot = (double)(rand()) / RAND_MAX;
-			if (selector == 0) {
-				for (int i = 0; i < cntr_trgt_1; i++) {
-					while (target[i].availability() == true) {
-						weapon.single_shoot();
-						if (shoot < target[i].chance()) {
-							target[i].penetration();
-						}
-						time--;
-					}
-				}
+		vector<Target*> tar;                         // Array of links on abstract class, initialization below 
+		for (int i = 0; i < targets; i++) {
+			int tmp = rand() % 4,
+				range = rand() % 101,
+				movable = rand() % 2,
+				material = rand() % 3;
+			if (tmp == 0) {
+				tar.push_back(new BigTarget());
+			}
+			else if (tmp == 1) {
+				tar.push_back(new MediumTarget());
+			}
+			else if (tmp == 2) {
+				tar.push_back(new SmallTarget());
+			}
+			else if (tmp == 3) {
+				tar.push_back(new RectangleTarget());
 			}
 
-			else if (selector == 1) {
-				for (int i = 0; i < cntr_trgt_1; i++) {
-					while (target[i].availability() == true) {
-						weapon.multi_shoot();
-						if (shoot < target[i].chance()) {
-							target[i].penetration();
-							target[i].penetration();
-							target[i].penetration();
-							target[i].penetration();
-							target[i].penetration();
-						}
-						time -= 5;
-					}
-				}
+			tar[i]->range = range;
+			movable == 0 ? tar[i]->movable = true : tar[i]->movable = false;
+			if (material == 0) {
+				tar[i]->material = 'M';
+			}
+			else if (material == 1) {
+				tar[i]->material = 'W';
+			}
+			else if (material == 2) {
+				tar[i]->material = 'L';
 			}
 		}
 
-		cout << "Time is over" << endl;
+		AutoWeapon weapon;
+		cout << "Total targets now: " << tar.size() << endl << endl;
+
+		for (int i = 0; i < tar.size(); i++) {
+			cout << "Target " << left << setw(3) << i << "|"
+				<< " Radius: " << setw(3) << tar[i]->radius
+				<< " Range: " << setw(3) << 100-tar[i]->range
+				<< " HP: " << setw(2) << tar[i]->hp
+				<< " Material: " << setw(2) << tar[i]->material
+				<< " Movable: " << setw(2) << tar[i]->movable
+				<< " Hit chance: " << setw(10) << tar[i]->chance() << endl;
+		}
+
+		cout << "\nShooting starts!\n";
+
+		int statTD = 0; double averageDamage = 0;
+		for (int i = 0; i < tar.size(); i++) {
+			if (time > 0) {
+				int selector = rand() % 2;
+				cout << "\nCurrent Target: " << i << ", Time: "<< time << endl;
+				while (tar[i]->availability() == true) {
+					double shoot = (double)(rand()) / RAND_MAX;
+					if (shoot <= tar[i]->chance() && selector == 0) {
+						tar[i]->penetration(weapon.single_shoot());
+						cout << "   Hit! " << endl;
+						averageDamage++;
+					}
+					else if (shoot > tar[i]->chance() && selector == 0) {
+						weapon.single_shoot();
+						cout << "   Miss! " << endl;
+					}
+					else if (shoot <= tar[i]->chance() && selector == 1) {
+						tar[i]->penetration(weapon.multi_shoot());
+						cout << "   Hit! " << endl;
+						averageDamage += 5;
+					}
+					else if (shoot > tar[i]->chance() && selector == 1) {
+						weapon.multi_shoot();
+						cout << "   Miss! " << endl;
+					}
+					time--;
+				}
+			}
+			else {
+				statTD = i;
+				break;
+			}
+		}
+
+		for (int i = 0; i < tar.size(); i++) {
+			if (tar[i]->hp < 0) {
+				averageDamage += tar[i]->hp;
+			}
+		}
+		cout << "\nTime is over!\n\nStats:\n---------------" << endl;
+		cout << "Targets destroyed: " << statTD << "\nTargets lost: " << targets - statTD << "\nAverage Damage: "<< averageDamage/statTD << endl;
 	}
 
 };
@@ -233,6 +285,10 @@ int main()
 		<< "                |___________________|\n\n\n";
 
 	srand((unsigned int)time(0));
+
+	SmallTarget t;
+	cout << t.radius;
+
 	ShootingField S;
 	S.start();
 }
