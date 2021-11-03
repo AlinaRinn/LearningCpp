@@ -11,34 +11,33 @@ public:
 	unsigned int ammo = 30,
 		damage = 1;
 
-	int single_shoot() {
-		if (ammo > 0) {
-			ammo--;
-			cout << "Bang!";
-			Sleep(1000);
+	int shoot(double chance, int count) {		
+		int hitter = 0;
+		for (int i = 0; i < count; i++) {
+			double shoot = (double)(rand()) / RAND_MAX;
+			int speed = (int)(1000 / count);
+			if (ammo <= 0) {
+				reload();
+			}
+			if (shoot <= chance) {
+				ammo--;
+				hitter++;
+				cout << "Bang!" << " Hit! " << "     Shoot's hit chance was: " << setw(10) << shoot << " | Hit chance: " << chance << endl;
+				Sleep(speed);
+			}
+			else if (shoot > chance) {
+				ammo--;
+				cout << "Twiy!" << " Miss!" << "     Shoot's hit chance was: " << setw(10) << shoot << " | Hit chance: " << chance << endl;
+				Sleep(speed);
+			}
 		}
-		else if (ammo <= 0) {
-			reload();
-			ammo--;
-			cout << "Bang!";
-			Sleep(1000);
-		}
-		return damage;
+		return damage * hitter;
 	}
 
-	int multi_shoot() {
-		if (ammo >= 5) {
-			ammo -= 5;
-			cout << "Bang! Bang! Bang! Bang! Bang!";
-			Sleep(1000);
-		}
-		else if (ammo < 5) {
-			reload();
-			ammo -= 5;
-			cout << "Bang! Bang! Bang! Bang! Bang!";
-			Sleep(1000);
-		}
-		return damage * 5;
+	int multi_shoot(double chance) {
+		int shootcounter = 3 + rand() % 5;
+		cout << "Burst! \n";
+		return shoot(chance, shootcounter);
 	}
 
 	void reload() {
@@ -49,20 +48,69 @@ public:
 };
 
 class Target {                           // Abstract class
-public:
-	const int radius = 100; // 0-100
+protected:
+	int radius = 100; // 0-100
 	int range = 100; // 0-100
 	double pntrtionchance = (radius + range) / 2; // 0-100
 	bool movable = false; // 50or100
 	char material = 'W'; // M - 95, W - 100, L - 99
 	int hp = 5;
 
+public:
 	virtual double chance() = 0;
+
+	virtual bool checkChance(double p) = 0;
 
 	virtual void penetration(int p) = 0;
 
 	virtual bool availability() = 0;
+
+	// // // // // // // // // // // // //
+
+	virtual int getRad() = 0;
+
+	virtual int getRange() = 0;
+
+	virtual double getPntr() = 0;
+
+	virtual bool getMove() = 0;
+
+	virtual char getMat() = 0;
+
+	virtual int getHp() = 0;
+
+	// // // // // // // // // // // // //
+
+	virtual void setRange(int p) = 0;
+
+	virtual void setPntr(double p) = 0;
+
+	virtual void setMove(bool p) = 0;
+
+	virtual void setMat(char p) = 0;
+
+	virtual void setHp(int p) = 0;
 };
+
+void Target::setRange(int p) {
+	range = p;
+}
+
+void Target::setPntr(double p) {
+	pntrtionchance = p;
+}
+
+void Target::setMove(bool p) {
+	movable = p;
+}
+
+void Target::setMat(char p) {
+	material = p;
+}
+
+void Target::setHp(int p) {
+	hp = p;
+}
 
 double Target::chance() {             // Default
 	double chnce = 0;
@@ -80,29 +128,73 @@ double Target::chance() {             // Default
 	return chnce / 500;
 }
 
-void Target::penetration(int p) {           // Default
-	hp -= p;
-}
-
-bool Target::availability() {          // Default
-	return hp > 0 ? true : false;
+bool Target::checkChance(double p) {
+	return p < chance() ? true : false;
 }
 
 class BigTarget : public Target {
 public:
-	const int radius = 100; // 0-100
+	int radius = 100; // 0-100
 	int hp = 5;
+
+	virtual void setRange(int p) {
+		return Target::setRange(p);
+	}
+
+	virtual void setPntr(double p) {
+		return Target::setPntr(p);
+	}
+
+	virtual void setMove(bool p) {
+		return Target::setMove(p);
+	}
+
+	virtual void setMat(char p) {
+		return Target::setMat(p);
+	}
+
+	virtual void setHp(int p) {
+		return Target::setHp(p);
+	}
+
+	virtual int getRad() {
+		return radius;
+	}
+
+	virtual int getRange() {
+		return range;
+	}
+
+	virtual double getPntr() {
+		return pntrtionchance;
+	}
+
+	virtual bool getMove() {
+		return movable;
+	}
+
+	virtual char getMat() {
+		return material;
+	}
+
+	virtual int getHp() {
+		return hp;
+	}
 
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual void penetration(int p) {
-		return Target::penetration(p);
+	virtual bool checkChance(double p) {
+		return Target::checkChance(p);
 	}
 
 	virtual bool availability() {
-		return Target::availability();
+		return hp > 0 ? true : false;
+	}
+
+	virtual void penetration(int p) {
+		hp -= p;
 	}
 };
 
@@ -111,16 +203,64 @@ public:
 	int radius = 75;
 	int hp = 3;
 
+	virtual void setRange(int p) {
+		return Target::setRange(p);
+	}
+
+	virtual void setPntr(double p) {
+		return Target::setPntr(p);
+	}
+
+	virtual void setMove(bool p) {
+		return Target::setMove(p);
+	}
+
+	virtual void setMat(char p) {
+		return Target::setMat(p);
+	}
+
+	virtual void setHp(int p) {
+		return Target::setHp(p);
+	}
+
+	virtual int getRad() {
+		return radius;
+	}
+
+	virtual int getRange() {
+		return range;
+	}
+
+	virtual double getPntr() {
+		return pntrtionchance;
+	}
+
+	virtual bool getMove() {
+		return movable;
+	}
+
+	virtual char getMat() {
+		return material;
+	}
+
+	virtual int getHp() {
+		return hp;
+	}
+
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual void penetration(int p) {
-		return Target::penetration(p);
+	virtual bool checkChance(double p) {
+		return Target::checkChance(p);
 	}
 
 	virtual bool availability() {
-		return Target::availability();
+		return hp > 0 ? true : false;
+	}
+
+	virtual void penetration(int p) {
+		hp -= p;
 	}
 };
 
@@ -129,16 +269,64 @@ public:
 	int radius = 50;
 	int hp = 1;
 
+	virtual void setRange(int p) {
+		return Target::setRange(p);
+	}
+
+	virtual void setPntr(double p) {
+		return Target::setPntr(p);
+	}
+
+	virtual void setMove(bool p) {
+		return Target::setMove(p);
+	}
+
+	virtual void setMat(char p) {
+		return Target::setMat(p);
+	}
+
+	virtual void setHp(int p) {
+		return Target::setHp(p);
+	}
+
+	virtual int getRad() {
+		return radius;
+	}
+
+	virtual int getRange() {
+		return range;
+	}
+
+	virtual double getPntr() {
+		return pntrtionchance;
+	}
+
+	virtual bool getMove() {
+		return movable;
+	}
+
+	virtual char getMat() {
+		return material;
+	}
+
+	virtual int getHp() {
+		return hp;
+	}
+
 	virtual double chance() {
 		return Target::chance();
 	}
 
-	virtual void penetration(int p) {
-		return Target::penetration(p);
+	virtual bool checkChance(double p) {
+		return Target::checkChance(p);
 	}
 
 	virtual bool availability() {
-		return Target::availability();
+		return hp > 0 ? true : false;
+	}
+
+	virtual void penetration(int p) {
+		hp -= p;
 	}
 };
 
@@ -148,6 +336,49 @@ public:
 		shape = 88;
 	int hp = 1;
 
+	virtual void setRange(int p) {
+		return Target::setRange(p);
+	}
+
+	virtual void setPntr(double p) {
+		return Target::setPntr(p);
+	}
+
+	virtual void setMove(bool p) {
+		return Target::setMove(p);
+	}
+
+	virtual void setMat(char p) {
+		return Target::setMat(p);
+	}
+
+	virtual void setHp(int p) {
+		return Target::setHp(p);
+	}
+
+	virtual int getRad() {
+		return radius;
+	}
+
+	virtual int getRange() {
+		return range;
+	}
+
+	virtual double getPntr() {
+		return pntrtionchance;
+	}
+
+	virtual bool getMove() {
+		return movable;
+	}
+
+	virtual char getMat() {
+		return material;
+	}
+
+	virtual int getHp() {
+		return hp;
+	}
 
 	double chance() {
 		double chnce = 0;
@@ -165,18 +396,22 @@ public:
 		return chnce / 600;
 	}
 
-	virtual void penetration(int p) {
-		return Target::penetration(p);
+	virtual bool checkChance(double p) {
+		return p < chance() ? true : false;
 	}
 
 	virtual bool availability() {
-		return Target::availability();
+		return hp > 0 ? true : false;
+	}
+
+	virtual void penetration(int p) {
+		hp -= p;
 	}
 };
 
 class ShootingField {
 public:
-	int time = 60, targets = 60;
+	int time = 10, targets = 60;
 
 	void start() {
 		vector<Target*> tar;                         // Array of links on abstract class, initialization below 
@@ -198,16 +433,16 @@ public:
 				tar.push_back(new RectangleTarget());
 			}
 
-			tar[i]->range = range;
-			movable == 0 ? tar[i]->movable = true : tar[i]->movable = false;
+			tar[i]->setRange(range);
+			movable == 0 ? tar[i]->setMove(true) : tar[i]->setMove(false);
 			if (material == 0) {
-				tar[i]->material = 'M';
+				tar[i]->setMat('M');
 			}
 			else if (material == 1) {
-				tar[i]->material = 'W';
+				tar[i]->setMat('W');
 			}
 			else if (material == 2) {
-				tar[i]->material = 'L';
+				tar[i]->setMat('L');
 			}
 		}
 
@@ -216,11 +451,11 @@ public:
 
 		for (int i = 0; i < tar.size(); i++) {
 			cout << "Target " << left << setw(3) << i << "|"
-				<< " Radius: " << setw(3) << tar[i]->radius
-				<< " Range: " << setw(3) << 100-tar[i]->range
-				<< " HP: " << setw(2) << tar[i]->hp
-				<< " Material: " << setw(2) << tar[i]->material
-				<< " Movable: " << setw(2) << tar[i]->movable
+				<< " Radius: " << setw(3) << tar[i]->getRad()
+				<< " Range: " << setw(3) << 100 - tar[i]->getRange()
+				<< " HP: " << setw(2) << tar[i]->getHp()
+				<< " Material: " << setw(2) << tar[i]->getMat()
+				<< " Movable: " << setw(2) << tar[i]->getMove()
 				<< " Hit chance: " << setw(10) << tar[i]->chance() << endl;
 		}
 
@@ -230,65 +465,44 @@ public:
 		for (int i = 0; i < tar.size(); i++) {
 			if (time > 0) {
 				int selector = rand() % 2;
-				cout << "\nCurrent Target: " << i << ", Time: "<< time << endl;
+				cout << "\nCurrent Target: " << i << ", Time: " << time << endl;
+				averageDamage += tar[i]->getHp();
 				while (tar[i]->availability() == true) {
-					double shoot = (double)(rand()) / RAND_MAX;
-					if (shoot <= tar[i]->chance() && selector == 0) {
-						tar[i]->penetration(weapon.single_shoot());
-						cout << "   Hit! " << endl;
-						averageDamage++;
+					if (selector == 0) {
+						tar[i]->penetration(weapon.shoot(tar[i]->chance(), 1));
+						time--;
 					}
-					else if (shoot > tar[i]->chance() && selector == 0) {
-						weapon.single_shoot();
-						cout << "   Miss! " << endl;
+					else if (selector == 1) {
+						int tmp = weapon.multi_shoot(tar[i]->chance());
+						tar[i]->penetration(tmp);
+						time--;
 					}
-					else if (shoot <= tar[i]->chance() && selector == 1) {
-						tar[i]->penetration(weapon.multi_shoot());
-						cout << "   Hit! " << endl;
-						averageDamage += 5;
-					}
-					else if (shoot > tar[i]->chance() && selector == 1) {
-						weapon.multi_shoot();
-						cout << "   Miss! " << endl;
-					}
-					time--;
 				}
-			}
-			else {
-				statTD = i;
-				break;
-			}
-		}
-
-		for (int i = 0; i < tar.size(); i++) {
-			if (tar[i]->hp < 0) {
-				averageDamage += tar[i]->hp;
+				statTD++;				
 			}
 		}
 		cout << "\nTime is over!\n\nStats:\n---------------" << endl;
-		cout << "Targets destroyed: " << statTD << "\nTargets lost: " << targets - statTD << "\nAverage Damage: "<< averageDamage/statTD << endl;
+		cout << "Targets destroyed: " << statTD << "\nTargets lost: " << targets - statTD << "\nAverage Damage: " << averageDamage / statTD << endl;
+		vector<Target*>().swap(tar);
+		cout << "Allocated memory: " << tar.capacity() << endl;
 	}
-
 };
 
-int main()
-{
-	cout << "              Welcome to the Shooting Field!\n"
-		<< "                 ___________________\n"
-		<< "                |-- _____________ --|\n"
-		<< "                |--|  _________  |--|\n"
-		<< "                |--| |  _____  | |--|\n"
-		<< "                |--| | |+++++| | |--|\n"
-		<< "                |--| | |+++++| | |--|\n"
-		<< "                |--| |_________| |--|\n"
-		<< "                |--|_____________|--|\n"
-		<< "                |___________________|\n\n\n";
+	int main()
+	{
+		cout << "              Welcome to the Shooting Field!\n"
+			<< "                 ___________________\n"
+			<< "                |-- _____________ --|\n"
+			<< "                |--|  _________  |--|\n"
+			<< "                |--| |  _____  | |--|\n"
+			<< "                |--| | |+++++| | |--|\n"
+			<< "                |--| | |+++++| | |--|\n"
+			<< "                |--| |_________| |--|\n"
+			<< "                |--|_____________|--|\n"
+			<< "                |___________________|\n\n\n";
 
-	srand((unsigned int)time(0));
-
-	SmallTarget t;
-	cout << t.radius;
-
-	ShootingField S;
-	S.start();
-}
+		srand((unsigned int)time(0));
+		ShootingField S;
+		S.start();
+		system("pause");
+	}
