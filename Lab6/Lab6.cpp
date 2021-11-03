@@ -30,6 +30,7 @@ public:
 				cout << "Twiy!" << " Miss!" << "     Shoot's hit chance was: " << setw(10) << shoot << " | Hit chance: " << chance << endl;
 				Sleep(speed);
 			}
+			chance -= 0.1;
 		}
 		return damage * hitter;
 	}
@@ -411,7 +412,7 @@ public:
 
 class ShootingField {
 public:
-	int time = 10, targets = 60;
+	int time = 30, targets = 60;
 
 	void start() {
 		vector<Target*> tar;                         // Array of links on abstract class, initialization below 
