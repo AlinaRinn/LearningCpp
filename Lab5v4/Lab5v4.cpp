@@ -37,12 +37,24 @@ public:
 	void Ability() {
 		cout << "Features: Good melee attack; High armor class" << endl;
 	}
+
+	Warrior(int p1, double p2, string p3) {
+		strength = p1;
+		cost = p2;
+		inf = p3;
+	}
 };
 
 class Hunter : public Hero {
 public:
 	void Ability() {
 		cout << "Features: Good range attack; High movement speed" << endl;
+	}
+
+	Hunter(int p1, double p2, string p3) {
+		strength = p1;
+		cost = p2;
+		inf = p3;
 	}
 };
 
@@ -56,16 +68,10 @@ public:
 		for (int i = 0; i < amount; i++) {
 			int tmp = rand() % 2;
 			if (tmp == 0) {
-				her.push_back(new Warrior());
-				her[i]->set_strength(3 + rand() % 8);
-				her[i]->set_cost((double)100 + rand() % 301);
-				her[i]->set_type("Warrior");
+				her.push_back(new Warrior(3 + rand() % 8, (double)100 + rand() % 301, "Warrior"));
 			}
 			else if (tmp == 1) {
-				her.push_back(new Hunter());
-				her[i]->set_strength(1 + rand() % 8);
-				her[i]->set_cost((double)80 + rand() % 221);
-				her[i]->set_type("Hunter");
+				her.push_back(new Hunter(1 + rand() % 8, (double)80 + rand() % 221, "Hunter"));
 			}
 		}
 	}
@@ -84,7 +90,7 @@ public:
 			cout << "Cost: " << her[i]->get_cost() << endl;
 			her[i]->Ability();
 			if (her[i]->get_strength() < strth) {
-				double tmp = strth - her[i]->get_strength(); // Multiplier
+				double tmp = double(strth) - her[i]->get_strength(); // Multiplier
 				her[i]->set_strength(strth);
 				her[i]->set_cost(her[i]->get_cost() * (1 + (tmp / strth)));
 				cout << "----------------\nHero resolved: " << endl;
