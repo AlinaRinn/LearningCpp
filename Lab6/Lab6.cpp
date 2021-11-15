@@ -11,7 +11,7 @@ public:
 	unsigned int ammo = 30,
 		damage = 1;
 
-	int shoot(double chance, int count) {		
+	int shoot(double chance, int count = 1) {		
 		int hitter = 0;
 		for (int i = 0; i < count; i++) {
 			double shoot = (double)(rand()) / RAND_MAX;
@@ -470,7 +470,7 @@ public:
 				averageDamage += tar[i]->getHp();
 				while (tar[i]->availability() == true) {
 					if (selector == 0) {
-						tar[i]->penetration(weapon.shoot(tar[i]->chance(), 1));
+						tar[i]->penetration(weapon.shoot(tar[i]->chance()));
 						time--;
 					}
 					else if (selector == 1) {
