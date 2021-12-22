@@ -3,7 +3,7 @@
 #include <vector>
 #include <iomanip>
 #include <algorithm>
-#define N 11
+#define N 18
 #define M 34
 
 using namespace std;
@@ -46,7 +46,7 @@ int main()
 	}
 
 	vector<string> finn;
-	char check[N] = { ' ', ',', '"', '—', '!', '?', '«', '»', '.', ':', ';'};
+	char check[N] = { ' ', ',', '"', '—', '–', '!', '?', '«', '»', '.', ':', ';', '[', ']', '(', ')', '’', '…' };
 	char UpperCase[M] = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
 	char LowerCase[M] = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 	string word;
@@ -70,7 +70,7 @@ int main()
 	sort(finn.begin(), finn.end());
 	cout << "Состав текста: " << "\n";
 	for (int i = 0; i < finn.size(); i++) {
-		cout << left << setw(5) << i+1 << finn[i] << "\n";
+		//cout << left << setw(8) << i+1 << finn[i] << "\n";
 	}
 
 	// Vector of Structs with words required + Printing
@@ -102,13 +102,15 @@ int main()
 		copies = 0;
 	}
 
+	sort(VecWords.begin(), VecWords.end(), [](const Word *dot1, const Word *dot2) { return dot1->copies > dot2->copies; } ); // Masterpiece
+
 	ofstream out("Oak_Analysis.txt");
 	ofstream out2("Oak_NoCopies.txt");
-	cout << "\n\nКол-во слов: " << "\n";
+	cout << "\n\nWrited in 'Oak_Analysis.txt' " << "\n";
 	out << "Кол-во слов: " << "\n";
 	for (int i = 0; i < VecWords.size() - 1; i++) {
-		cout << left << setw(5) << i + 1 << setw(25) << VecWords[i]->word << setw(3) << VecWords[i]->copies << "\n";
-		out << left << setw(5) << i + 1 << setw(25) << VecWords[i]->word << setw(3) << VecWords[i]->copies << "\n";
+		//cout << left << setw(8) << i + 1 << setw(25) << VecWords[i]->word << setw(3) << VecWords[i]->copies << "\n";
+		out << left << setw(8) << i + 1 << setw(25) << VecWords[i]->word << setw(3) << VecWords[i]->copies << "\n";
 		out2 << VecWords[i]->word << " ";
 	}
 	out.close();
