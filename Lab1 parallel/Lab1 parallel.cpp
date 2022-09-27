@@ -21,51 +21,36 @@ void hunter(int &hit, int shoots)
 	}
 }
 
+void create_threads(int hunters, int shoots) {
+	int hits = 0;
+	std::vector<std::thread> threads;
+
+	for (int i = 0; i < hunters; i++)
+	{
+		threads.push_back(std::thread(hunter, std::ref(hits), shoots));
+	}
+	for (auto& th : threads)
+	{
+		th.join();
+	}
+	std::cout << "---------\nHits: " << hits << " Hunters: " << threads.size() << "\n\n\n";
+	threads.clear();
+}
+
 int main()
 {
-	int hits = 0;
 	int shoots = 1000;
 	int hunters = 1;
-	std::vector<std::thread> threads;
 
 	std::cout << "     __\n" <<
 		           " ____(o)>\n" <<
 		            "\\ < _. )\n" <<
 		             " `----'\n" << "\nDuck hunt" << std::endl;
-
-	for (int i = 0; i < hunters; i++)
-	{
-		threads.push_back(std::thread(hunter, std::ref(hits), shoots));
-	}
-	for (auto & th : threads)
-	{
-		th.join();
-	}
-	std::cout << "---------\nHits: " << hits << " Hunters: " << threads.size() << "\n\n\n";
-	threads.clear();
+	create_threads(hunters, shoots);
 	hunters++;
-
-	for (int i = 0; i < hunters; i++)
-	{
-		threads.push_back(std::thread(hunter, std::ref(hits), shoots));
-	}
-	for (auto& th : threads)
-	{
-		th.join();
-	}
-	std::cout << "---------\nHits: " << hits << " Hunters: " << threads.size() << "\n\n\n";	threads.clear();
+	create_threads(hunters, shoots);
 	hunters += 2;
-
-	for (int i = 0; i < hunters; i++)
-	{
-		threads.push_back(std::thread(hunter, std::ref(hits), shoots));
-	}
-	for (auto& th : threads)
-	{
-		th.join();
-	}
-	std::cout << "---------\nHits: " << hits << " Hunters: " << threads.size() << "\n\n\n";
-	threads.clear();
+	create_threads(hunters, shoots);
 
 	return 0;
 }
