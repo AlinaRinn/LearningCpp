@@ -5,15 +5,19 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <mutex>
 
 void hunter(int &hit, int shoots)
 {
 	srand((unsigned int)time(0));
+	std::mutex mutex;
 	for (int i = 0; i < shoots; i++) {
 		int random = rand() % 100;
 		if (random == 7) {
 			std::cout << "Bang! Gotcha! \n";
+			mutex.lock();
 			hit++;
+			mutex.unlock();
 		}
 		else {
 			std::cout << "Bang! Miss \n";
