@@ -26,9 +26,9 @@ void hunter(int &hit, int shoots)
 	mutex.unlock();
 }
 
-void create_threads(int hunters, int shoots) {
+float create_threads(int hunters, int shoots) {
 	int hits = 0;
-	int thread_shoots = shoots / hunters;
+	int thread_shoots = (int)(shoots / hunters);
 	std::vector<std::thread> threads;
 	auto start = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < hunters; i++)
@@ -41,25 +41,25 @@ void create_threads(int hunters, int shoots) {
 	}
 	auto end = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> duration = end - start;
-	std::cout << "-----------------\nHits: " << hits << " Hunters: " << threads.size() << " Total time: " << (float)duration.count() << "\n\n\n";
+	std::cout << "-----------------\nHits: " << hits << " Hunters: " << threads.size();
 	threads.clear();
+	return (float)duration.count();
 }
 
 int main()
 {
-	int shoots = 100000000; // Must be /2
-	int hunters = 1;
+	int shoots = 50000000; // Must be /2
+	int hunters = 11;
 
 	std::cout << "     __\n" <<
 		           " ____(o)>\n" <<
 		            "\\ < _. )\n" <<
 		             " `----'\n" << "\nDuck hunt" << std::endl;
-	create_threads(hunters, shoots);
+	std::cout << " Total time: " << create_threads(hunters, shoots) << "\n\n\n";
 	hunters += 1;
-	create_threads(hunters, shoots);
+	std::cout << " Total time: " << create_threads(hunters, shoots) << "\n\n\n";
 	hunters += 2;
-	create_threads(hunters, shoots);
-
+	std::cout << " Total time: " << create_threads(hunters, shoots) << "\n\n\n";
 	system("pause");
 	return 0;
 }
