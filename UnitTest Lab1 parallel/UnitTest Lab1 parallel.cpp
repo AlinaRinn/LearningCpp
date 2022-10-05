@@ -12,14 +12,16 @@ namespace UnitTestLab1parallel
 		
 		TEST_METHOD(TestTime)
 		{
-			int shoots = 50000000;
+			int shoots = 60000000;
 			float check = 0, tmp = 0;
-			for (int hunters = 1; hunters < 12; hunters++) {
+			std::string s;
+			for (int hunters = 1; hunters <= 12; hunters++) {
 				tmp = create_threads(hunters, shoots);
-				//std::cout << "Test " << hunters << ": " << tmp;
-				Logger::WriteMessage("Test ");
 				if (hunters > 1) {
+					s = "Test thread " + std::to_string(hunters - 1) + " and " + std::to_string(hunters) + "\n";
+					Logger::WriteMessage(s.c_str());
 					Assert::IsTrue(tmp < check);
+					Logger::WriteMessage("Pass\n\n");
 				}
 				check = tmp;
 			}
