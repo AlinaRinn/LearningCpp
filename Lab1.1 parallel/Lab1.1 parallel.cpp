@@ -9,23 +9,33 @@
 #include <chrono>
 #include <thread>
 
-float counter() {
+// Bad practice 2, no access restriction, doesnt matter =]
+std::array<std::string, 300> custom_array;
+
+float counter(int start, int stop) {
 
 }
 
-float create_threads(int number, int shoots) {
-	int hits = 0;
-	int thread_shoots = (int)(shoots / hunters);
+float create_threads(int number_threads) {
+	int even = 0,
+		odd = 0,
+		threads_piece = (int)(custom_array.size() / number_threads),
+		start = 0,
+	    stop = threads_piece - 1;
 	std::vector<std::thread> threads;
 	auto start = std::chrono::high_resolution_clock::now();
-	for (int i = 0; i < hunters; i++)
+
+	for (int i = 0; i < number_threads; i++)
 	{
-		threads.push_back(std::thread(hunter, std::ref(hits), thread_shoots));
+		threads.push_back(std::thread(counter, start, stop));
+		start = ++stop;
+		stop += threads_piece;
 	}
 	for (auto& th : threads)
 	{
 		th.join();
 	}
+
 	auto end = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> duration = end - start;
 	std::cout << "-----------------\nHits: " << hits << " Hunters: " << threads.size();
@@ -35,14 +45,28 @@ float create_threads(int number, int shoots) {
 
 int main()
 {
-	srand(time(0));
-	std::array<std::string, 300> custom;
-	for (std::string var : custom) {
-		for (int i = 0; i < 200000; i++) {
+	// Variables
+	int number_threads = 1, 
+		string_lenght = 200000;
+	srand((unsigned int)time(0));
+
+	// Fulling Array
+ 	for (std::string var : custom_array) {
+		for (int i = 0; i < string_lenght; i++) {
 			var += std::to_string((rand() % 9));
 		}
-		//std::cout << var << "\n\n";
 	}
 
+	// Threads
+	int number_threads = 1;
+	create_threads(number_threads);
+	number_threads++;
+	create_threads(number_threads);
+	number_threads += 2;
+	create_threads(number_threads);
+	number_threads += 6;
+	create_threads(number_threads);
 
+	system("pause");
+	return EXIT_SUCCESS;
 }
