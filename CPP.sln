@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab1 parallel", "Lab1 paral
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest Lab1 parallel", "UnitTest Lab1 parallel\UnitTest Lab1 parallel.vcxproj", "{180A9BF2-0B85-40C4-AC29-E9F965A81AD0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab1.1 parallel", "Lab1.1 parallel\Lab1.1 parallel.vcxproj", "{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -121,6 +123,14 @@ Global
 		{180A9BF2-0B85-40C4-AC29-E9F965A81AD0}.Release|x64.Build.0 = Release|x64
 		{180A9BF2-0B85-40C4-AC29-E9F965A81AD0}.Release|x86.ActiveCfg = Release|Win32
 		{180A9BF2-0B85-40C4-AC29-E9F965A81AD0}.Release|x86.Build.0 = Release|Win32
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Debug|x64.ActiveCfg = Debug|x64
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Debug|x64.Build.0 = Debug|x64
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Debug|x86.ActiveCfg = Debug|Win32
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Debug|x86.Build.0 = Debug|Win32
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Release|x64.ActiveCfg = Release|x64
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Release|x64.Build.0 = Release|x64
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Release|x86.ActiveCfg = Release|Win32
+		{BCA25EFD-39DC-4501-B0BD-78D6266D82E7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
