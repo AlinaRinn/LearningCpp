@@ -8,15 +8,12 @@
 #include <vector>
 #include <chrono>
 #include <thread>
-#include <algorithm>
 #include <iomanip>
-#include <mutex>
-std::mutex mutex;
 
 // Bad practice 2, no access restriction, doesnt matter =]
 std::array<std::string, 300> custom_array;
 
-
+// Function, which counts evens
 void counter(int start, int stop, int *even_array) {
 	std::string s;
 	int even = 0, x = 0;
@@ -33,6 +30,7 @@ void counter(int start, int stop, int *even_array) {
 	}
 }
 
+// Function, which calls threads
 float create_threads(int number_threads, int string_lenght) {
 	int threads_piece = (int)(custom_array.size() / number_threads),
 		start = 0,
