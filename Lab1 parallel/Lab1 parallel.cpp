@@ -9,6 +9,7 @@
 #include <chrono>
 std::mutex mutex;
 
+// Function, which shoots the duck
 void hunter(int &hit, int shoots)
 {
 	int local_hit = 0;
@@ -26,6 +27,7 @@ void hunter(int &hit, int shoots)
 	mutex.unlock();
 }
 
+// Function, which calls threads
 float create_threads(int hunters, int shoots) {
 	int hits = 0;
 	int thread_shoots = (int)(shoots / hunters);
@@ -55,6 +57,8 @@ int main()
 		           " ____(o)>\n" <<
 		            "\\ < _. )\n" <<
 		             " `----'\n" << "\nDuck hunt" << std::endl;
+
+	// Function calls & time output
 	std::cout << " Total time: " << create_threads(hunters, shoots) << "\n\n\n";
 	hunters += 1;
 	std::cout << " Total time: " << create_threads(hunters, shoots) << "\n\n\n";

@@ -79,7 +79,7 @@ int main()
 	}
 	std::cout << "Finish of filling array\n\n";
 
-	// Threads & time output
+	// Function call & time output
 	std::cout << "\nThreads: " << number_threads << " Total time: " << create_threads(number_threads, string_lenght) << "\n\n\n";
 	number_threads++;
 	std::cout << "\nThreads: " << number_threads << " Total time: " << create_threads(number_threads, string_lenght) << "\n\n\n";
