@@ -70,6 +70,7 @@ int main()
 	float progress = 0, 
 		increment = 100.0 / custom_array.size();
 	std::cout << "Start of filling array\n";
+
  	for (int i = 0; i < custom_array.size(); i++) {
 		for (int j = 0; j < string_lenght; j++) {
 			custom_array.at(i) += std::to_string((rand() % 9));

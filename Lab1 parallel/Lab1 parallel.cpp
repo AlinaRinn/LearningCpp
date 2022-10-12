@@ -51,7 +51,7 @@ float create_threads(int hunters, int shoots) {
 int main()
 {
 	int shoots = 50000000; // Must be /2
-	int hunters = 11;
+	int hunters = 1;
 
 	std::cout << "     __\n" <<
 		           " ____(o)>\n" <<
