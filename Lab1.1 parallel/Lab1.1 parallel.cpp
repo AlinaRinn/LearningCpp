@@ -9,12 +9,13 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <omp.h>
 
 // Bad practice 2, no access restriction, doesnt matter =]
 std::array<std::string, 300> custom_array;
 
 // Function, which counts evens
-void counter(int start, int stop, int *even_array) {
+void counter(int start, int stop, int* even_array) {
 	std::string s;
 	int even = 0, x = 0;
 	for (int i = start; i <= stop; i++) {
@@ -34,7 +35,7 @@ void counter(int start, int stop, int *even_array) {
 float create_threads(int number_threads, int string_lenght) {
 	int threads_piece = (int)(custom_array.size() / number_threads),
 		start = 0,
-	    stop = threads_piece - 1;
+		stop = threads_piece - 1;
 	std::array<int, custom_array.size()> even_array;
 	std::vector<std::thread> threads;
 	auto begin = std::chrono::high_resolution_clock::now();
@@ -52,7 +53,7 @@ float create_threads(int number_threads, int string_lenght) {
 
 	auto end = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<float> duration = end - begin;
-	for (int i = 0; i < even_array.size() ; i++) {
+	for (int i = 0; i < even_array.size(); i++) {
 		std::cout << std::left << "String: " << std::setw(8) << i << " Even: " << std::setw(7) << even_array.at(i) << " Odd: " << std::setw(7) << string_lenght - even_array.at(i) << "\n";
 	}
 	//threads.clear();
@@ -62,23 +63,26 @@ float create_threads(int number_threads, int string_lenght) {
 int main()
 {
 	// Variables
-	int number_threads = 1, 
+	int number_threads = 1,
 		string_lenght = 200000;
 	srand((unsigned int)time(0));
 
 	// Filling Array. Also need parallelization for better performance -_-
-	float progress = 0, 
+	float progress = 0,
 		increment = 100.0 / custom_array.size();
 	std::cout << "Start of filling array\n";
-
- 	for (int i = 0; i < custom_array.size(); i++) {
+	auto begin = std::chrono::high_resolution_clock::now();
+	for (int i = 0; i < custom_array.size(); i++) {
 		for (int j = 0; j < string_lenght; j++) {
-			custom_array.at(i) += std::to_string((rand() % 9));
+			custom_array.at(i) += std::to_string((rand() % 10));
 		}
 		progress += increment;
+
 		std::cout << std::left << std::setprecision(3) << std::setw(6) << progress << "%\n";
 	}
-	std::cout << "Finish of filling array\n\n";
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<float> duration = end - begin;
+	std::cout << "Finish of filling array for: " << (float)duration.count() << " sec\n\n";
 
 	// Function call & time output
 	std::cout << "\nThreads: " << number_threads << " Total time: " << create_threads(number_threads, string_lenght) << "\n\n\n";
