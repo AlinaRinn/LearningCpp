@@ -9,7 +9,6 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
-#include <omp.h>
 
 // Bad practice 2, no access restriction, doesnt matter =]
 std::array<std::string, 300> custom_array;
