@@ -12,6 +12,7 @@ int main(int argc, char** argv) {
 	bool Check0 = true;
 	bool Check1 = true;
 	MPI_Status status;
+	srand((unsigned int)time(0));
 
 	MPI_Init(&argc, &argv); 
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -22,18 +23,25 @@ int main(int argc, char** argv) {
 	printf("Proc name %s, Rank %d, Size %d\n\n", proc_name, rank, size);
 
 		if (rank == 0) {
-			char thought[] = "You Shall Not Pass!";
-			char receiver[50];
-			int n = 0;
+			int rnd = 0, n = 0;
+			char sender[100] = "";
+			char receiver[100];
 
 			while (n < TIME_TALK) {
-				MPI_Send(&thought, 50, MPI_CHAR, 1, 5, MPI_COMM_WORLD);
-				MPI_Recv(&receiver, 50, MPI_CHAR, 1, 5, MPI_COMM_WORLD, &status);
+				rnd = rand() % 3;
+				switch (rnd)
+				{
+				case 0:	strcpy(sender, "You Shall Not Pass!"); break;
+				case 1: strcpy(sender, "Tell me, friend, when did Saruman the Wise abandon reason for madness?"); break;
+				case 2: strcpy(sender, "But we still have time.Time enough to counter Sauron if we act quickly."); break;
+				default: break;
+				}
+				MPI_Send(&sender, 100, MPI_CHAR, 1, 5, MPI_COMM_WORLD);
+				MPI_Recv(&receiver, 100, MPI_CHAR, 1, 5, MPI_COMM_WORLD, &status);
 
 				if (Check0 == true) {
 					Check0 = false;
 					printf("The wise man %d says: %s\n\n", rank, receiver);
-					//std::cout << "The wise man " << rank << " says: " << speech1 << "\n\n";
 				}
 				else if (Check0 == false) {
 					Check0 = true;
@@ -43,17 +51,25 @@ int main(int argc, char** argv) {
 		}
 
 		if (rank == 1) {
-			char thought[] = "I love the smell of napalm in the morning.";
-			char receiver[50];
-			int n = 0;
+			int rnd = 0, n = 0;
+			char sender[100] = "";
+			char receiver[100];
 
 			while (n < TIME_TALK) {
-				MPI_Recv(&receiver, 50, MPI_CHAR, 0, 5, MPI_COMM_WORLD, &status);
-				MPI_Send(&thought, 50, MPI_CHAR, 0, 5, MPI_COMM_WORLD);
+				rnd = rand() % 4;
+				switch (rnd)
+				{
+				case 0:	strcpy(sender, "We must join with Him, Gandalf. We must join with Sauron. It would be wise, my friend."); break;
+				case 1: strcpy(sender, "Against the power of Mordor there can be no victory."); break;
+				case 2: strcpy(sender, "Time? What time do you think we have?"); break;
+				case 3:	strcpy(sender, "I gave you the chance of aiding me willingly, but you have elected the way of pain!"); break;
+				default: break;
+				}
+				MPI_Recv(&receiver, 100, MPI_CHAR, 0, 5, MPI_COMM_WORLD, &status);
+				MPI_Send(&sender, 100, MPI_CHAR, 0, 5, MPI_COMM_WORLD);
 				if (Check1 == true) {
 					Check1 = false;
 					printf("The wise man %d says: %s\n\n", rank, receiver);
-					//std::cout << "The wise man " << rank << " says: " << speech0 << "\n\n";
 				}
 				else if (Check1 == false) {
 					Check1 = true;
