@@ -1,0 +1,11 @@
+10
+Ketchup;Food;5;12.5
+CellPhone;Electronics;12;250
+Purifier Phillips;Electronics;10;346
+Bipki;Bipki;111;0.05
+Chair;Furniture;2;11112.1
+Table;Furniture;3254;300
+BatteryAA;Electronics;100;0.01
+Bed;Furniture;7;307
+MacBook;Electronics;5;3
+Sofa;Furniture;3;12.776
